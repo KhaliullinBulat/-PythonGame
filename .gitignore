@@ -6,6 +6,8 @@ __pycache__/
 # C extensions
 *.so
 
+.idea
+
 PyGame
 # Distribution / packaging
 .Python
@@ -103,3 +105,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+
+
