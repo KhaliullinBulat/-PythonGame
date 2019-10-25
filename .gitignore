@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+.idea
+
+PyGame
 # Distribution / packaging
 .Python
 build/
@@ -104,3 +107,6 @@ PyGame/
 
 # mypy
 .mypy_cache/
+
+
+
