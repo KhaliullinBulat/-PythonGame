@@ -29,11 +29,20 @@ class Map:
 rnd_values = [2, 4, 8, 16, 32, 64]
 colors_by_value = {2: (0, 122, 122), 4: (122, 122, 0), 8: (122, 0, 122), 16: (188, 0, 188), 32: (188, 188, 0), 64: (0, 188, 188)}
 
-x = 50
-y = 50
-width = 40
-height = 60
-speed = 5
+# x = 50
+# y = 50
+# width = 40
+# height = 60
+# speed = 5
+
+for x_coor in range(5):
+    for y_coor in range(5):
+        circ = Krug(x_coor * 50 + 100, y_coor * 50 + 100)
+        circ.value = random.choice(rnd_values)
+        circ.color = colors_by_value[circ.value]
+        pygame.draw.circle(win, circ.color, (circ.x, circ.y), 20)
+        num = pygame.font.Font(None, 25).render(str(circ.value), True, (0, 0, 0))
+        win.blit(num, [x_coor * 50 + 92, y_coor * 50 + 92])
 
 run = True
 while run:
@@ -43,24 +52,22 @@ while run:
         if event.type == pygame.QUIT:
             run = False
 
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_LEFT]:
-        x -= speed
-    if keys[pygame.K_RIGHT]:
-        x += speed
-    if keys[pygame.K_UP]:
-        y -= speed
-    if keys[pygame.K_DOWN]:
-        y += speed
+    keys = pygame.mouse.get_pressed()  # .key.get_pressed()
+    if keys[pygame.MOUSEBUTTONDOWN]:
+
+
+    # if keys[pygame.K_LEFT]:
+    #     x -= speed
+    # if keys[pygame.K_RIGHT]:
+    #     x += speed
+    # if keys[pygame.K_UP]:
+    #     y -= speed
+    # if keys[pygame.K_DOWN]:
+    #     y += speed
 
     # win.fill((0, 0, 0))
-    pygame.draw.rect(win, (0, 0, 255), (x, y, width, height))
-    for x_coor in range(5):
-        for y_coor in range(5):
-            circ = Krug(x_coor*50 + 100, y_coor*50 + 100)
-            circ.value = random.choice(rnd_values)
-            circ.color = colors_by_value[circ.value]
-            pygame.draw.circle(win, circ.color, (circ.x, circ.y), 20)
+    # pygame.draw.rect(win, (0, 0, 255), (x, y, width, height))
+
     pygame.display.update()
 
 pygame.quit()
