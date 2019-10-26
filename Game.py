@@ -1,73 +1,91 @@
+#coding=utf-8
 import pygame
 import random
-import numpy as np
+import math
 
 pygame.init()
-win = pygame.display.set_mode((500, 500))
+screen = pygame.display.set_mode((500, 700))
+pygame.display.set_caption("Connect Pops")
+font = pygame.font.Font(None, 30)
+rnd_values = [2, 4, 8, 16, 32, 64, 128, 256]
+colors_by_value = {2: (248, 24, 148), 4: (237, 41, 57), 8: (255, 211, 0), 16: (249, 166, 2), 32: (76, 187, 23), 64: (63, 224, 208), 128: (0, 142, 204), 256: (0, 0, 128)}
+circles = []
 
-pygame.display.set_caption("Some_game '2048'")
 
-class Krug:
-    def __init__(self, x, y):
+class Circle:
+    def __init__(self, x, y, value, pressed=False):
         self.x = x
         self.y = y
-    color = (255, 0, 0)
-    value = 0
-    state = 'unselected'
+        self.value = value
+        self.pressed = pressed
 
+    def draw(self, screen):
+        pygame.draw.circle(screen, colors_by_value[self.value], (self.x, self.y), 30)
+        value = font.render(str(self.value), True, (255, 255, 255))
+        screen.blit(value, [self.x - 15, self.y - 8])
 
 class Map:
     def __init__(self, width, height, elements):
         counter = 0
         self.field = []
-        for x in range(width):
-            for y in range(height):
+        for i in range(width):
+            for j in range(height):
                 counter += 1
-                self.field[x, y] = elements[counter]
+                self.field[i, j] = elements[counter]
 
 
-rnd_values = [2, 4, 8, 16, 32, 64]
-colors_by_value = {2: (0, 122, 122), 4: (122, 122, 0), 8: (122, 0, 122), 16: (188, 0, 188), 32: (188, 188, 0), 64: (0, 188, 188)}
+screen.fill((255, 255, 255))
+x = 110
+y = 210
+for i in range(5):
+    for j in range(5):
+        circle = Circle(x, y, random.choice(rnd_values))
+        circle.draw(screen)
+        value = font.render(str(circle.value), True, (255, 255, 255))
+        screen.blit(value, [circle.x - 15, circle.y - 8])
+        circles.append(circle)
+        x += 70
+    x = 110
+    y += 70
+pygame.display.update()
 
-# x = 50
-# y = 50
-# width = 40
-# height = 60
-# speed = 5
-
-for x_coor in range(5):
-    for y_coor in range(5):
-        circ = Krug(x_coor * 50 + 100, y_coor * 50 + 100)
-        circ.value = random.choice(rnd_values)
-        circ.color = colors_by_value[circ.value]
-        pygame.draw.circle(win, circ.color, (circ.x, circ.y), 20)
-        num = pygame.font.Font(None, 25).render(str(circ.value), True, (0, 0, 0))
-        win.blit(num, [x_coor * 50 + 92, y_coor * 50 + 92])
-
-run = True
-while run:
+gameOver = False
+previous_value = 0
+previous_center = (0, 0)
+while not gameOver:
     pygame.time.delay(100)
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            run = False
+            gameOver = True
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            coors = event.pos
+            for circle in circles:
+                if (coors[0] - circle.x)**2 + (coors[1] - circle.y)**2 <= 30**2:
+                    if previous_value == 0 and previous_center == (0, 0):
+                        previous_value = circle.value
+                        previous_center = (circle.x, circle.y)
+                        circle.pressed = True
+                    else:
+                        if circle.value == previous_value and math.sqrt((circle.x - previous_center[0])**2 + (circle.y - previous_center[1])**2) <= 99:
+                            pygame.draw.line(screen, colors_by_value[circle.value], [previous_center[0], previous_center[1]], [circle.x, circle.y], 3)
+                            pygame.display.update()
+                            previous_value = circle.value
+                            previous_center = (circle.x, circle.y)
+                            circle.pressed = True
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+            previous_center = (0, 0)
+            previous_value = 0
+            screen.fill((255, 255, 255))
+            for circle in circles:
+                if circle.pressed:
+                    #заменить здесь рандомное значение на сумму значений выбранных кружков
+                    new_circle = Circle(circle.x, circle.y, random.choice(rnd_values))
+                    circles.remove(circle)
+                    circles.append(new_circle)
+                    new_circle.draw(screen)
+                else:
+                    circle.draw(screen)
+            pygame.display.update()
 
-    keys = pygame.mouse.get_pressed()  # .key.get_pressed()
-    if keys[pygame.MOUSEBUTTONDOWN]:
-
-
-    # if keys[pygame.K_LEFT]:
-    #     x -= speed
-    # if keys[pygame.K_RIGHT]:
-    #     x += speed
-    # if keys[pygame.K_UP]:
-    #     y -= speed
-    # if keys[pygame.K_DOWN]:
-    #     y += speed
-
-    # win.fill((0, 0, 0))
-    # pygame.draw.rect(win, (0, 0, 255), (x, y, width, height))
-
-    pygame.display.update()
-
+pygame.display.update()
 pygame.quit()
