@@ -72,11 +72,11 @@ def check_level():
 
 def draw_progress_bar():
     points_percent = float(points) / float(1000)
-    pygame.draw.rect(screen, (44, 117, 255), (100, 110, int(300 * points_percent), 20))
+    pygame.draw.rect(screen, (44, 117, 255), (100, 120, int(300 * points_percent), 10))
     text1 = font.render(str(level), True, (44, 117, 255))
     text2 = font.render(str(level + 1), True, (44, 117, 255))
-    screen.blit(text1, [80, 110])
-    screen.blit(text2, [420, 110])
+    screen.blit(text1, [80, 115])
+    screen.blit(text2, [420, 115])
 
 
 class Circle:
