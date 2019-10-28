@@ -57,9 +57,10 @@ def choise_sum(sum):
         i /= 2
         k += 1
     if 2**k == sum:
-        return 2**k;
+        return 2**k
     else:
         return 2**(k-1)
+
 
 def check_level():
     global points
@@ -96,6 +97,18 @@ for i in range(5):
         x += 70
     x = 110
     y += 70
+
+#points_percent = float(points) / float(1000)
+pygame.draw.rect(screen, (44, 117, 255), (100, 120, 1, 10))
+text1 = font.render(str(level), True, (44, 117, 255))
+text2 = font.render(str(level + 1), True, (44, 117, 255))
+screen.blit(text1, [80, 115])
+screen.blit(text2, [420, 115])
+
+pygame.draw.rect(screen, (44, 117, 255), (360, 50, 80, 40))
+text3 = font.render('restart', True, (255, 255, 255))
+screen.blit(text3, [368, 60])
+
 pygame.display.update()
 
 gameOver = False
@@ -110,6 +123,41 @@ while not gameOver:
             gameOver = True
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             coors = event.pos
+            if 360 <= coors[0] <= 440 and 50 <= coors[1] <= 90:
+                screen.fill((255, 255, 255))
+                previous_value = 0
+                previous_center = (0, 0)
+                last_circle_coors = (0, 0)
+                sum = 0
+                circles = []
+                level = 1
+                points = 0
+                x = 110
+                y = 210
+                f = get_value(1000)
+                for i in range(5):
+                    for j in range(5):
+                        circle = Circle(x, y, next(f))
+                        circle.draw(screen)
+                        value = font.render(str(circle.value), True, (255, 255, 255))
+                        screen.blit(value, [circle.x - 15, circle.y - 8])
+                        circles.append(circle)
+                        x += 70
+                    x = 110
+                    y += 70
+
+                #points_percent = float(points) / float(1000)
+                pygame.draw.rect(screen, (44, 117, 255), (100, 120, 1, 10))
+                text1 = font.render(str(level), True, (44, 117, 255))
+                text2 = font.render(str(level + 1), True, (44, 117, 255))
+                screen.blit(text1, [80, 115])
+                screen.blit(text2, [420, 115])
+
+                pygame.draw.rect(screen, (44, 117, 255), (360, 50, 80, 40))
+                text3 = font.render('restart', True, (255, 255, 255))
+                screen.blit(text3, [368, 60])
+
+                pygame.display.update()
             for circle in circles:
                 if (coors[0] - circle.x)**2 + (coors[1] - circle.y)**2 <= 30**2:
                     if previous_value == 0 and previous_center == (0, 0):
@@ -129,6 +177,9 @@ while not gameOver:
                             circle.pressed = True
         if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
             screen.fill((255, 255, 255))
+            pygame.draw.rect(screen, (44, 117, 255), (360, 50, 80, 40))
+            text3 = font.render('restart', True, (255, 255, 255))
+            screen.blit(text3, [368, 60])
             for circle in circles:
                 if circle.pressed:
                     if (circle.x, circle.y) != last_circle_coors:
@@ -150,11 +201,11 @@ while not gameOver:
             sum = 0
             check_level()
             points_percent = float(points)/float(1000)
-            pygame.draw.rect(screen, (44, 117, 255), (100, 50, int(300 * points_percent), 10))
+            pygame.draw.rect(screen, (44, 117, 255), (100, 120, int(300 * points_percent), 10))
             text1 = font.render(str(level), True, (44, 117, 255))
             text2 = font.render(str(level + 1), True, (44, 117, 255))
-            screen.blit(text1, [80, 45])
-            screen.blit(text2, [420, 45])
+            screen.blit(text1, [80, 115])
+            screen.blit(text2, [420, 115])
             pygame.display.update()
 pygame.display.update()
 pygame.quit()
