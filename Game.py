@@ -7,7 +7,12 @@ pygame.init()
 screen = pygame.display.set_mode((500, 700))
 pygame.display.set_caption("Connect Pops")
 font = pygame.font.Font(None, 30)
-colors_by_value = {2: (248, 24, 148), 4: (237, 41, 57), 8: (255, 211, 0), 16: (249, 166, 2), 32: (76, 187, 23), 64: (63, 224, 208), 128: (0, 142, 204), 256: (0, 0, 128), 512: (186, 102, 255), 1024: (114, 0, 163), 2048: (248, 24, 148), 4096: (237, 41, 57)}
+colors_by_value = {
+                    2: (248, 24, 148), 4: (237, 41, 57), 8: (255, 211, 0),
+                    16: (249, 166, 2), 32: (76, 187, 23), 64: (63, 224, 208),
+                    128: (0, 142, 204), 256: (0, 0, 128), 512: (186, 102, 255),
+                    1024: (114, 0, 163), 2048: (248, 24, 148), 4096: (237, 41, 57)
+}
 circles = []
 level = 1
 points = 0
@@ -17,6 +22,7 @@ def get_value(limit):
     k = 0
     while k < limit:
         k += 1
+        rnd_values = []
         if level < 10:
             rnd_values = [2, 4, 8]
         if 10 <= level < 20:
@@ -73,8 +79,8 @@ def check_level():
 def draw_progress_bar():
     points_percent = float(points) / float(1000)
     pygame.draw.rect(screen, (44, 117, 255), (100, 120, int(300 * points_percent), 10))
-    text1 = font.render(str(level), True, (44, 117, 255))
-    text2 = font.render(str(level + 1), True, (44, 117, 255))
+    text1 = font.render("%s" % level, True, (44, 117, 255))
+    text2 = font.render("%s" % (level + 1), True, (44, 117, 255))
     screen.blit(text1, [80, 115])
     screen.blit(text2, [420, 115])
 
@@ -88,7 +94,7 @@ class Circle:
 
     def draw(self, screen):
         pygame.draw.circle(screen, colors_by_value[self.value], (self.x, self.y), 30)
-        value = font.render(str(self.value), True, (255, 255, 255))
+        value = font.render("%s" % self.value, True, (255, 255, 255))
         screen.blit(value, [self.x - 15, self.y - 8])
 
 
@@ -172,7 +178,8 @@ while not gameOver:
                         sum += circle.value
                         circle.pressed = True
                     else:
-                        if circle.value == previous_value and math.sqrt((circle.x - previous_center[0])**2 + (circle.y - previous_center[1])**2) <= 99:
+                        cond = math.sqrt((circle.x - previous_center[0])**2 + (circle.y - previous_center[1])**2) <= 99
+                        if circle.value == previous_value and cond:
                             pygame.draw.line(screen, colors_by_value[circle.value], [previous_center[0], previous_center[1]], [circle.x, circle.y], 3)
                             pygame.display.update()
                             previous_value = circle.value
