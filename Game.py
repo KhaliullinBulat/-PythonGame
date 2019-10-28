@@ -119,6 +119,22 @@ while not gameOver:
     pygame.time.delay(100)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            file_r = open("players.txt", "r")
+            file_w = open("players.txt", "a")
+            str = file_r.readline()
+            if str != "":
+                number = 0
+                while str != "":
+                    number = int(str.split(" ")[1])
+                    str = file_r.readline()
+                number += 1
+                score = (level - 1) * 1000 + points
+                file_w.write("Player %s %s \n" % (number, score))
+            else:
+                score = (level - 1) * 1000 + points
+                file_w.write("Player 1 %s \n" % score)
+            file_r.close()
+            file_w.close()
             gameOver = True
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             coors = event.pos
