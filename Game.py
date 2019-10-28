@@ -98,9 +98,29 @@ while not gameOver:
     pygame.time.delay(100)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            file_r = open("players.txt", "r")
+            file_w = open("players.txt", "a")
+            stroka = file_r.readline()
+            if stroka != "":
+                number = 0
+                while stroka != "":
+                    number = int(stroka.split(" ")[1])
+                    stroka = file_r.readline()
+                number += 1
+                score = (level - 1) * 1000 + points
+                file_w.write("Player %s %s \n" % (number, score))
+            else:
+                score = (level - 1) * 1000 + points
+                file_w.write("Player 1 %s \n" % score)
+            file_r.close()
+            file_w.close()
             gameOver = True
         if is_menu:
             screen.fill((255, 255, 255))
+            pops = pygame.image.load("popes.jpg")
+            pops_rect = pops.get_rect()
+            img = pygame.transform.scale(pops, (500, 700))
+            screen.blit(img, pops_rect)
             pygame.draw.rect(screen, (44, 117, 255), (175, 200, 150, 40))
             play_text = font.render('Play', True, (255, 255, 255))
             screen.blit(play_text, [225, 210])
@@ -114,11 +134,43 @@ while not gameOver:
             screen.blit(records_text, [210, 370])
             pygame.display.update()
 
+            if event.type == pygame.MOUSEBUTTONUP:
+                coors = event.pos
+                if 175 <= coors[0] <= 325 and 360 <= coors[1] <= 400:
+
+                    file_r = open("players.txt", 'r')
+                    screen.fill((255, 255, 255))
+                    x_cord = 205
+                    y_cord = 60
+                    pygame.draw.rect(screen, (44, 117, 255), (20, 20, 460, 660))
+                    for line in file_r.readlines()[len(file_r.readlines()) - 15:]:
+                        player_text = font.render(line[:len(line)-2], True, (255, 255, 255))
+                        screen.blit(player_text, [x_cord, y_cord])
+                        y_cord += 40
+
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 coors = event.pos
+
+
                 if 175 <= coors[0] <= 325 and 280 <= coors[1] <= 320:
+                    file_r = open("players.txt", "r")
+                    file_w = open("players.txt", "a")
+                    stroka = file_r.readline()
+                    if stroka != "":
+                        number = 0
+                        while stroka != "":
+                            number = int(stroka.split(" ")[1])
+                            stroka = file_r.readline()
+                        number += 1
+                        score = (level - 1) * 1000 + points
+                        file_w.write("Player %s %s \n" % (number, score))
+                    else:
+                        score = (level - 1) * 1000 + points
+                        file_w.write("Player 1 %s \n" % score)
+                    file_r.close()
+                    file_w.close()
                     is_menu = False
-                    level = 0
+                    level = 1
                     points = 0
                     screen.fill((255, 255, 255))
                     x = 110
@@ -196,6 +248,22 @@ while not gameOver:
                 screen.blit(menu_text, [94, 60])
 
                 if 360 <= coors[0] <= 440 and 50 <= coors[1] <= 90:
+                    file_r = open("players.txt", "r")
+                    file_w = open("players.txt", "a")
+                    stroka = file_r.readline()
+                    if stroka != "":
+                        number = 0
+                        while stroka != "":
+                            number = int(stroka.split(" ")[1])
+                            stroka = file_r.readline()
+                        number += 1
+                        score = (level - 1) * 1000 + points
+                        file_w.write("Player %s %s \n" % (number, score))
+                    else:
+                        score = (level - 1) * 1000 + points
+                        file_w.write("Player 1 %s \n" % score)
+                    file_r.close()
+                    file_w.close()
                     level = 1
                     points = 0
                     screen.fill((255, 255, 255))
