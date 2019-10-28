@@ -72,11 +72,11 @@ def check_level():
 
 def draw_progress_bar():
     points_percent = float(points) / float(1000)
-    pygame.draw.rect(screen, (44, 117, 255), (100, 50, int(300 * points_percent), 10))
+    pygame.draw.rect(screen, (44, 117, 255), (100, 110, int(300 * points_percent), 20))
     text1 = font.render(str(level), True, (44, 117, 255))
     text2 = font.render(str(level + 1), True, (44, 117, 255))
-    screen.blit(text1, [80, 45])
-    screen.blit(text2, [420, 45])
+    screen.blit(text1, [80, 110])
+    screen.blit(text2, [420, 110])
 
 
 class Circle:
@@ -106,7 +106,7 @@ for i in range(5):
     y += 70
 draw_progress_bar()
 pygame.draw.rect(screen, (44, 117, 255), (360, 50, 80, 40))
-text3 = font.render('restart', True, (255, 255, 255))
+text3 = font.render('Restart', True, (255, 255, 255))
 screen.blit(text3, [368, 60])
 pygame.display.update()
 
@@ -138,24 +138,14 @@ while not gameOver:
                     for j in range(5):
                         circle = Circle(x, y, next(f))
                         circle.draw(screen)
-                        value = font.render(str(circle.value), True, (255, 255, 255))
-                        screen.blit(value, [circle.x - 15, circle.y - 8])
                         circles.append(circle)
                         x += 70
                     x = 110
                     y += 70
-
-                #points_percent = float(points) / float(1000)
-                pygame.draw.rect(screen, (44, 117, 255), (100, 120, 1, 10))
-                text1 = font.render(str(level), True, (44, 117, 255))
-                text2 = font.render(str(level + 1), True, (44, 117, 255))
-                screen.blit(text1, [80, 115])
-                screen.blit(text2, [420, 115])
-
+                draw_progress_bar()
                 pygame.draw.rect(screen, (44, 117, 255), (360, 50, 80, 40))
-                text3 = font.render('restart', True, (255, 255, 255))
+                text3 = font.render('Restart', True, (255, 255, 255))
                 screen.blit(text3, [368, 60])
-
                 pygame.display.update()
             for circle in circles:
                 if (coors[0] - circle.x)**2 + (coors[1] - circle.y)**2 <= 30**2:
